@@ -11,6 +11,8 @@ namespace Business.Abstract
 {
     public interface IBuildService
     {
-        IDataResult<List<Build>> GetAll();
+        IDataResult<List<Build>> GetAll(int userId);
+        IDataResult<Build> GetBuildById(string buildId,int userId);
+        IResult Add(Build build);
     }
 }

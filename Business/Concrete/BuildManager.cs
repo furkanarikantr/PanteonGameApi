@@ -20,10 +20,30 @@ namespace Business.Concrete
             _buildDal = buildDal;
         }
 
-        public IDataResult<List<Build>> GetAll()
+        public IResult Add(Build build)
         {
-            var result = _buildDal.GetAll();
+            _buildDal.Insert(build);
+            return new SuccessResult();
+        }
+
+        public IDataResult<List<Build>> GetAll(int userId)
+        {
+            var result = _buildDal.GetAll(filter: x => x.UserId == userId);
             return new SuccessDataResult<List<Build>>(result);
+        }
+
+        public IDataResult<Build> GetBuildById(string buildId, int userId)
+        {
+            var build = _buildDal.Get(buildId);
+            if (build.UserId == userId)
+            {
+                return new SuccessDataResult<Build>(build);
+            }
+            else
+            {
+                return new ErrorDataResult<Build>("Yetkisiz Erişim!");
+            }
+            
         }
     }
 }
