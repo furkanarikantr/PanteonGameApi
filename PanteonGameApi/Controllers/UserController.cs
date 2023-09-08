@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Dtos;
 using Entity.Concrete.MySqlEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,21 +7,21 @@ namespace PanteonGameApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : Controller
+    public class UserController : Controller
     {
         private readonly IUserService _userService;
 
-        public AccountController(IUserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
 
-        [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] UserLoginDto model)
+        [Authorize]
+        [HttpPost("add-user")]
+        public IActionResult AddUser(User user)
         {
-            var token = _userService.Authenticate(model.Username, model.Password);
-            return Ok(token);
+            var result = _userService.AddUser(user);
+            return Ok(result);
         }
     }
 }

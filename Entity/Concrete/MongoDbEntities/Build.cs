@@ -12,7 +12,8 @@ namespace Entity.Concrete.MongoDbEntities
     public class Build : IEntity
     {
         public ObjectId Id { get; set; }
-        public int UserId { get; set; }
-        //public BuildType BuildType { get; set; }
+        public string BuildType { get; set; }
+        public double BuildCost { get; set; }
+        public long ConstructionTime { get; set; }
     }
 }

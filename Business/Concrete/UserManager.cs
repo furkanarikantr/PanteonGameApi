@@ -23,6 +23,18 @@ namespace Business.Concrete
             _tokenService = tokenService;
         }
 
+        public IResult AddUser(User user)
+        {
+            if (CheckIfUserName(user.UserName).Success && CheckIfEmail(user.Email).Success)
+            {
+                _userDal.Insert(user);
+                return new SuccessResult();
+            }
+            return new ErrorResult("Bilgiler Kullanılıyor, Kontrol Ediniz."); 
+            
+           
+        }
+
         public IResult Authenticate(string username, string password)
         {
             var user = _userDal.Get(filter: x => x.Password == password && x.UserName == username);
@@ -59,6 +71,29 @@ namespace Business.Concrete
         {
             var result = _userDal.Get(filter: u => u.UserId == userId);
             return new SuccessDataResult<User>(result);
+        }
+
+
+        //BusinessRules
+        
+        private IResult CheckIfUserName(string userName)
+        {
+            var users = _userDal.List(filter: u => u.UserName == userName).ToList();
+            if (users != null)
+            {
+                return new ErrorResult("Kullanıcı Adı Kullanılıyor. Lütfen Farklı Bir Kullanıcı Adı Deneyiniz.");
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfEmail(string email)
+        {
+            var users = _userDal.List(filter: u => u.Email == email).ToList();
+            if (users != null)
+            {
+                return new ErrorResult("Email Kullanılıyor. Lütfen Farklı Bir Email Deneyiniz.");
+            }
+            return new SuccessResult();
         }
     }
 }

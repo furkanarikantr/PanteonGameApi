@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Extensions;
 using Entity.Concrete.MongoDbEntities;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +14,7 @@ namespace PanteonGameApi.Controllers
     {
         private readonly IBuildService _buildService;
         private readonly IUserService _userService;
+        
 
         public BuildController(IBuildService buildService, IUserService userService)
         {
@@ -23,9 +26,7 @@ namespace PanteonGameApi.Controllers
         [HttpGet("build")]
         public IActionResult GetBuildById(string buildId)
         {
-            var userId = User.GetClaimValue(System.Security.Claims.ClaimTypes.NameIdentifier);
-
-            var data = _buildService.GetBuildById(buildId,Convert.ToInt32(userId));
+            var data = _buildService.GetBuildById(buildId);
             return Ok(data);
         }
 
@@ -33,10 +34,7 @@ namespace PanteonGameApi.Controllers
         [HttpGet("build-list")]
         public IActionResult BuildList()
         {
-            var userId = User.GetClaimValue(System.Security.Claims.ClaimTypes.NameIdentifier);
-            
-
-            var data = _buildService.GetAll(Convert.ToInt32(userId));
+            var data = _buildService.GetAll();
             return Ok(data);
         }
 
@@ -44,10 +42,6 @@ namespace PanteonGameApi.Controllers
         [HttpPost("build-add")]
         public IActionResult AddBuild(Build build)
         {
-            var userId = User.GetClaimValue(System.Security.Claims.ClaimTypes.NameIdentifier);
-            var user = _userService.GetUserById(Convert.ToInt32(userId));
-
-            build.UserId = Convert.ToInt32(userId);
             var result = _buildService.Add(build);
             return Ok(result);
         }
