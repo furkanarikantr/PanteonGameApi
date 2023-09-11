@@ -13,13 +13,10 @@ namespace PanteonGameApi.Controllers
     public class BuildController : Controller
     {
         private readonly IBuildService _buildService;
-        private readonly IUserService _userService;
-        
 
         public BuildController(IBuildService buildService, IUserService userService)
         {
             _buildService = buildService;
-            _userService = userService;
         }
 
         [Authorize]
@@ -43,6 +40,14 @@ namespace PanteonGameApi.Controllers
         public IActionResult AddBuild(Build build)
         {
             var result = _buildService.Add(build);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpDelete("build-delete")]
+        public IActionResult DeleteBuild(string buildId)
+        {
+            var result = _buildService.Delete(buildId);
             return Ok(result);
         }
     }

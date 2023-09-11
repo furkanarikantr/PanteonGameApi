@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants.BusinessMessages;
 using Core.Dtos;
 using Core.Utilies.Results.Abstract;
 using Core.Utilies.Results.Concrete;
@@ -25,14 +26,23 @@ namespace Business.Concrete
 
         public IResult AddUser(User user)
         {
-            if (CheckIfUserName(user.UserName).Success && CheckIfEmail(user.Email).Success)
+            if (CheckIfUsernameAlreadyTaken(user.UserName).Success && CheckIfEmailAlreadyTaken(user.Email).Success)
             {
                 _userDal.Insert(user);
                 return new SuccessResult();
             }
-            return new ErrorResult("Bilgiler Kullanılıyor, Kontrol Ediniz."); 
-            
-           
+            else if (CheckIfUsernameAlreadyTaken(user.UserName).Success == false && CheckIfEmailAlreadyTaken(user.Email).Success == true)
+            {
+                return new ErrorResult(UserBusinessRulesMessages.CheckIfUsernameAlreadyTaken);
+            }
+            else if (CheckIfEmailAlreadyTaken(user.Email).Success == false && CheckIfUsernameAlreadyTaken(user.UserName).Success == true)
+            {
+                return new ErrorResult(UserBusinessRulesMessages.CheckIfUsernameAlreadyTaken);
+            }
+            else 
+            {
+                return new ErrorResult(UserBusinessRulesMessages.CheckIfUsernameAlreadyTaken + " - " + UserBusinessRulesMessages.CheckIfEmailAlreadyTaken);
+            }
         }
 
         public IResult Authenticate(string username, string password)
@@ -76,22 +86,22 @@ namespace Business.Concrete
 
         //BusinessRules
         
-        private IResult CheckIfUserName(string userName)
+        private IResult CheckIfUsernameAlreadyTaken(string userName)
         {
             var users = _userDal.List(filter: u => u.UserName == userName).ToList();
-            if (users != null)
+            if (users.Count != 0)
             {
-                return new ErrorResult("Kullanıcı Adı Kullanılıyor. Lütfen Farklı Bir Kullanıcı Adı Deneyiniz.");
+                return new ErrorResult();
             }
             return new SuccessResult();
         }
 
-        private IResult CheckIfEmail(string email)
+        private IResult CheckIfEmailAlreadyTaken(string email)
         {
             var users = _userDal.List(filter: u => u.Email == email).ToList();
-            if (users != null)
+            if (users.Count != 0)
             {
-                return new ErrorResult("Email Kullanılıyor. Lütfen Farklı Bir Email Deneyiniz.");
+                return new ErrorResult();
             }
             return new SuccessResult();
         }

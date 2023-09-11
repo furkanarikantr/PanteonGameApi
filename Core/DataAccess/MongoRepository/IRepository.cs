@@ -15,6 +15,6 @@ namespace Core.DataAccess.MongoRepository
 
         void Insert(TEntity entity);
         void Update(TEntity entity, string id);
-        void Delete(TEntity entity, string id);
+        void Delete(string id);
     }
 }

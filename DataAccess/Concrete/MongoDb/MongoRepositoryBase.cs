@@ -25,7 +25,7 @@ namespace DataAccess.Concrete.MongoDb
             _collection = _context.GetCollection<TEntity>();
         }
 
-        public void Delete(TEntity entity, string id)
+        public void Delete(string id)
         {
             var objectId = ObjectId.Parse(id);
             var filter = Builders<TEntity>.Filter.Eq("Id", objectId);

@@ -30,10 +30,16 @@ namespace Business.Concrete
             if (!result.IsValid)
             {
                 var errorMessage = result.Errors.Select(e => e.ErrorMessage).ToList();
-                return new ErrorResult(string.Join(", ", errorMessage));
+                return new ErrorResult(string.Join(" - ", errorMessage));
             }
             _buildDal.Insert(build);
             return new SuccessResult();
+        }
+
+        public IResult Delete(string buildId)
+        {
+            _buildDal.Delete(buildId);
+            return new SuccessResult("silindi");
         }
 
         public IDataResult<List<Build>> GetAll()
@@ -45,8 +51,7 @@ namespace Business.Concrete
         public IDataResult<Build> GetBuildById(string buildId)
         {
             var build = _buildDal.Get(buildId);
-            
-                return new SuccessDataResult<Build>(build);            
+            return new SuccessDataResult<Build>(build);
         }
     }
 }

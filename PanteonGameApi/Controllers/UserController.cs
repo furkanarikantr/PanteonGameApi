@@ -16,7 +16,6 @@ namespace PanteonGameApi.Controllers
             _userService = userService;
         }
 
-        [Authorize]
         [HttpPost("add-user")]
         public IActionResult AddUser(User user)
         {

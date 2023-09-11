@@ -1,5 +1,4 @@
 ﻿using Core.Utilies.Results.Abstract;
-using DataAccess.Abstract;
 using Entity.Concrete.MongoDbEntities;
 using System;
 using System.Collections.Generic;
@@ -9,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IBuildService
+    public interface IBuildTypeService
     {
-        IDataResult<List<Build>> GetAll();
-        IDataResult<Build> GetBuildById(string buildId );
-        IResult Add(Build build);
-        IResult Delete(string buildId);
+        IDataResult<List<BuildType>> GetAll();
+
+        IResult Add(BuildType buildType);
     }
 }

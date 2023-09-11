@@ -28,7 +28,7 @@ namespace Business.Concrete
                 issuer: "PanteonGame",
                 audience: "PanteonGameToken",
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(1),
+                expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: signinCredentials
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
