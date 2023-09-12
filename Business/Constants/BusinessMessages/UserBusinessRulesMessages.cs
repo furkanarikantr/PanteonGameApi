@@ -10,5 +10,9 @@ namespace Business.Constants.BusinessMessages
     {
         public static string CheckIfUsernameAlreadyTaken = "The Username Has Already Been Taken. Please Enter a Different Username!";
         public static string CheckIfEmailAlreadyTaken = "The Email Has Already Been Taken. Please Enter a Different Email!";
+
+        public static string CheckIfUsernameAndPasswordIsTrue = "The User Login Correct!";
+        public static string CheckIfUsernameAndPasswordIsFalse = "The User Login Wrong! Check Your Information!";
+
     }
 }

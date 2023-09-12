@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants.ValidationMessages;
 using Business.ValidationRules.FluentValidation;
 using Core.Utilies.Results.Abstract;
 using Core.Utilies.Results.Concrete;
@@ -33,13 +34,13 @@ namespace Business.Concrete
                 return new ErrorResult(string.Join(" - ", errorMessage));
             }
             _buildDal.Insert(build);
-            return new SuccessResult();
+            return new SuccessResult(BuildValidatorMessages.BuildAdded);
         }
 
         public IResult Delete(string buildId)
         {
             _buildDal.Delete(buildId);
-            return new SuccessResult("silindi");
+            return new SuccessResult(BuildValidatorMessages.BuildDeleted);
         }
 
         public IDataResult<List<Build>> GetAll()

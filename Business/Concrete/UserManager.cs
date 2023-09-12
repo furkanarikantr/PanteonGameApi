@@ -50,22 +50,25 @@ namespace Business.Concrete
         {
             var user = _userDal.Get(filter: x => x.Password == password && x.UserName == username);
 
-            if (user == null)
-                return null;
-
-            var claims = new List<Claim>
+            if(CheckIfUsernameAndPasswordIsTrue(username, password).Success) {
+                var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, username),
                  new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
 
             };
-            var accessToken = _tokenService.GenerateAccessToken(claims);
-            _userDal.Update(user);
+                var accessToken = _tokenService.GenerateAccessToken(claims);
+                _userDal.Update(user);
 
-            return new SuccessDataResult<AuthenticateDto>(new AuthenticateDto
-            {
-                Token = accessToken,
-            });
+                return new SuccessDataResult<AuthenticateDto>(new AuthenticateDto
+                {
+                    Token = accessToken,
+                },UserBusinessRulesMessages.CheckIfUsernameAndPasswordIsTrue);
+            }
+
+            return new ErrorResult(UserBusinessRulesMessages.CheckIfUsernameAndPasswordIsFalse);
+
+            
         }
 
         public IDataResult<List<User>> GetList()
@@ -95,6 +98,17 @@ namespace Business.Concrete
         {
             var users = _userDal.List(filter: u => u.Email == email).ToList();
             if (users.Count != 0)
+            {
+                return new ErrorResult();
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfUsernameAndPasswordIsTrue(string username, string password)
+        {
+            var user = _userDal.List(filter: u => u.UserName == username).FirstOrDefault();
+
+            if (user.Password != password)
             {
                 return new ErrorResult();
             }
