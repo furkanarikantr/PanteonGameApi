@@ -26,8 +26,6 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<BuildTypeManeger>().As<IBuildTypeService>();
             builder.RegisterType<BuildTypeDal>().As<IBuildTypeDal>();
-
-
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Core.DataAccess.MongoRepository
     {
         TEntity Get(string id);
         List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null);
-
         void Insert(TEntity entity);
         void Update(TEntity entity, string id);
         void Delete(string id);

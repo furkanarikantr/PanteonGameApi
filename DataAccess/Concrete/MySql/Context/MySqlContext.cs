@@ -10,8 +10,6 @@ namespace DataAccess.Concrete.MySql.Context
 {
     public class MySqlContext : DbContext
     {
-
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=Furkarikan11;database=PanteonGameUser", new MySqlServerVersion(new Version(8, 0, 34)));

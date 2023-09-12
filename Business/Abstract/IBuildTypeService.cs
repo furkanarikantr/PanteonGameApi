@@ -11,7 +11,6 @@ namespace Business.Abstract
     public interface IBuildTypeService
     {
         IDataResult<List<BuildType>> GetAll();
-
         IResult Add(BuildType buildType);
     }
 }

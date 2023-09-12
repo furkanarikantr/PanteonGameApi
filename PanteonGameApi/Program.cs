@@ -19,22 +19,16 @@ namespace PanteonGameApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
             builder.Services.Configure<MongoSettings>(options =>
             {
                 options.ConnectionString = builder.Configuration.GetSection("MongoConnection:ConnectionString").Value;
                 options.Database = builder.Configuration.GetSection("MongoConnection:Database").Value;
 
             });
-
             builder.Services.AddScoped(typeof(IRepository<>), typeof(MongoRepositoryBase<>));
-
             builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
             builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
 
@@ -56,13 +50,13 @@ namespace PanteonGameApi
                                 ValidateAudience = false
                             };
                         });
-
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAllOrigins",
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder
+                               .AllowAnyOrigin()
                                .AllowAnyHeader()
                                .AllowAnyMethod();
                     });
@@ -70,7 +64,6 @@ namespace PanteonGameApi
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

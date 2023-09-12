@@ -10,7 +10,6 @@ namespace Core.Utilies.Results.Concrete
 {
     public class Result : IResult
     {
-        //getter'lar readonly'dir ve readonly'ler constructor'da set edilebilir.
         public Result(bool success, string message) : this(success)
         {
             Message = message;

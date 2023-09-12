@@ -23,14 +23,6 @@ namespace Core.DataAccess.EntityFramework.Concrete
             }
         }
 
-        //public TEntity Get(Expression<Func<TEntity, bool>> filter)
-        //{
-        //    using (TContext context = new TContext())
-        //    {
-        //        return context.Set<TEntity>().SingleOrDefault(filter);
-        //    }
-        //}
-
         public TEntity Get(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includes = null)
         {
             using (TContext context = new TContext())

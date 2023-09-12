@@ -18,6 +18,7 @@ namespace Business.Concrete
     {
         IUserDal _userDal;
         ITokenService _tokenService;
+
         public UserManager(IUserDal userDal, ITokenService tokenService)
         {
             _userDal = userDal;
@@ -59,10 +60,6 @@ namespace Business.Concrete
 
             };
             var accessToken = _tokenService.GenerateAccessToken(claims);
-            //var refreshToken = _tokenService.GenerateRefreshToken();
-
-            //user.RefreshToken = refreshToken;
-            //user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             _userDal.Update(user);
 
             return new SuccessDataResult<AuthenticateDto>(new AuthenticateDto
@@ -83,9 +80,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(result);
         }
 
-
         //BusinessRules
-        
         private IResult CheckIfUsernameAlreadyTaken(string userName)
         {
             var users = _userDal.List(filter: u => u.UserName == userName).ToList();

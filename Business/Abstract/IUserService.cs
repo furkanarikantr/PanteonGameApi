@@ -12,9 +12,7 @@ namespace Business.Abstract
     {
         IDataResult<List<User>> GetList();
         IDataResult<User> GetUserById(int userId);
-
         IResult AddUser(User user);
-
         IResult Authenticate(string username, string password);
     }
 }
