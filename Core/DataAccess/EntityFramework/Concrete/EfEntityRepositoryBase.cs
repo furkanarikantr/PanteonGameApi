@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Core.DataAccess.EntityFramework.Concrete
 {
-    public class EfEntityRepositoryBase<TEntity, TContext> : IEntityRepository<TEntity> where TEntity : class, IEntity, new() where TContext : DbContext, new()
+    public class EfEntityRepositoryBase<TEntity, TContext> : IEfEntityRepository<TEntity> where TEntity : class, IEntity, new() where TContext : DbContext, new()
     {
         public void Delete(TEntity entity)
         {

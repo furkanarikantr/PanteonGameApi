@@ -8,6 +8,8 @@ namespace Business.Constants.BusinessMessages
 {
     public static class UserBusinessRulesMessages
     {
+        public static string UserAccepted = "The New User Added Successfully";
+
         public static string CheckIfUsernameAlreadyTaken = "The Username Has Already Been Taken. Please Enter a Different Username!";
         public static string CheckIfEmailAlreadyTaken = "The Email Has Already Been Taken. Please Enter a Different Email!";
 

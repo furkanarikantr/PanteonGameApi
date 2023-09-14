@@ -1,12 +1,16 @@
 ﻿using Business.Abstract;
 using Business.Constants.BusinessMessages;
+using Business.ValidationRules.FluentValidation;
 using Core.Dtos;
 using Core.Utilies.Results.Abstract;
 using Core.Utilies.Results.Concrete;
 using DataAccess.Abstract;
+using Entity.Concrete.MongoDbEntities;
 using Entity.Concrete.MySqlEntities;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -27,10 +31,20 @@ namespace Business.Concrete
 
         public IResult AddUser(User user)
         {
+            var context = new ValidationContext<User>(user);
+            UserValidator validator = new UserValidator();
+
+            var resultValidator = validator.Validate(context);
+            if (!resultValidator.IsValid)
+            {
+                var errorMessage = resultValidator.Errors.Select(e => e.ErrorMessage).ToList();
+                return new ErrorResult(string.Join(" - ", errorMessage));
+            }
+
             if (CheckIfUsernameAlreadyTaken(user.UserName).Success && CheckIfEmailAlreadyTaken(user.Email).Success)
             {
                 _userDal.Insert(user);
-                return new SuccessResult();
+                return new SuccessResult(UserBusinessRulesMessages.UserAccepted);
             }
             else if (CheckIfUsernameAlreadyTaken(user.UserName).Success == false && CheckIfEmailAlreadyTaken(user.Email).Success == true)
             {
@@ -38,9 +52,9 @@ namespace Business.Concrete
             }
             else if (CheckIfEmailAlreadyTaken(user.Email).Success == false && CheckIfUsernameAlreadyTaken(user.UserName).Success == true)
             {
-                return new ErrorResult(UserBusinessRulesMessages.CheckIfUsernameAlreadyTaken);
+                return new ErrorResult(UserBusinessRulesMessages.CheckIfEmailAlreadyTaken);
             }
-            else 
+            else
             {
                 return new ErrorResult(UserBusinessRulesMessages.CheckIfUsernameAlreadyTaken + " - " + UserBusinessRulesMessages.CheckIfEmailAlreadyTaken);
             }
@@ -50,25 +64,26 @@ namespace Business.Concrete
         {
             var user = _userDal.Get(filter: x => x.Password == password && x.UserName == username);
 
-            if(CheckIfUsernameAndPasswordIsTrue(username, password).Success) {
-                var claims = new List<Claim>
+            if (CheckIfUsernameAndPasswordIsTrue(username, password).Success)
             {
-                new Claim(ClaimTypes.Name, username),
-                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                };
 
-            };
                 var accessToken = _tokenService.GenerateAccessToken(claims);
                 _userDal.Update(user);
 
                 return new SuccessDataResult<AuthenticateDto>(new AuthenticateDto
                 {
                     Token = accessToken,
-                },UserBusinessRulesMessages.CheckIfUsernameAndPasswordIsTrue);
+                }, UserBusinessRulesMessages.CheckIfUsernameAndPasswordIsTrue);
             }
 
             return new ErrorResult(UserBusinessRulesMessages.CheckIfUsernameAndPasswordIsFalse);
 
-            
+
         }
 
         public IDataResult<List<User>> GetList()
@@ -106,9 +121,9 @@ namespace Business.Concrete
 
         private IResult CheckIfUsernameAndPasswordIsTrue(string username, string password)
         {
-            var user = _userDal.List(filter: u => u.UserName == username).FirstOrDefault();
+            var user = _userDal.List(filter: u => u.UserName == username && u.Password == password).FirstOrDefault();
 
-            if (user.Password != password)
+            if (user == null)
             {
                 return new ErrorResult();
             }

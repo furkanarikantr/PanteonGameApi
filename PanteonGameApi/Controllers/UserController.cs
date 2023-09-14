@@ -22,5 +22,13 @@ namespace PanteonGameApi.Controllers
             var result = _userService.AddUser(user);
             return Ok(result);
         }
+
+        [Authorize]
+        [HttpGet("list-user")]
+        public IActionResult ListUser()
+        {
+            var result = _userService.GetList();
+            return Ok(result);
+        }
     }
 }

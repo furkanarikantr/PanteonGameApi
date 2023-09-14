@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Core.DataAccess.EntityFramework.Abstract
 {
-    public interface IEntityRepository<T> where T : class, IEntity, new()
+    public interface IEfEntityRepository<T> where T : class, IEntity, new()
     {
         List<T> List(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
         T Get(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);

@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.ValidationRules.FluentValidation;
+using Core.Dtos;
 using Core.Extensions;
 using Entity.Concrete.MongoDbEntities;
 using FluentValidation.Results;
@@ -45,9 +46,9 @@ namespace PanteonGameApi.Controllers
 
         [Authorize]
         [HttpDelete("build-delete")]
-        public IActionResult DeleteBuild(string buildId)
+        public IActionResult DeleteBuild(BuildDeleteDto buildDeleteDto)
         {
-            var result = _buildService.Delete(buildId);
+            var result = _buildService.Delete(buildDeleteDto.BuildId);
             return Ok(result);
         }
     }

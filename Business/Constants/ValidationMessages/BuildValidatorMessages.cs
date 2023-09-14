@@ -10,7 +10,6 @@ namespace Business.Constants.ValidationMessages
     {
         public static string BuildTypeMustBeChosen = "The Building Type Must be Selected!";
 
-
         public static string BuildCostMustNotEmpty = "The Building Cost Must be Entered!";
         public static string BuildCostBeGreaterThan = "The Building Cost Cannot be Greater Than Zero!";
 
