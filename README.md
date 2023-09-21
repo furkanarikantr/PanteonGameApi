@@ -1,5 +1,4 @@
-This project repository is prepared for Panteon Games job interview. 
-
+This project repository is prepared for Panteon Games.
 In this section, there are back-end related developments for our services.
 
 - Asp.Net Core Web Api (Restful)
